@@ -16,8 +16,8 @@ public class PlayerController : MonoBehaviour {
     [Header("Advanced Settings")]
     public Vector3 liftPoint;
     public LayerMask discludePlayer;
-    public float sphereCastRadius;
-    public float sphereCastMaxDistance;
+    public float CapsuleCastRadius;
+    public float CapsuleCastMaxDistance;
     public Vector3 groundCheckPoint;
     public float groundConfirmRadius;
 
@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour {
 
         Debug.DrawRay(ray.origin, ray.direction, Color.red, Time.deltaTime, false);
 
-        if (Physics.SphereCast(ray.origin, sphereCastRadius, ray.direction, out tempHit, sphereCastMaxDistance, discludePlayer))
+        if (Physics.CapsuleCast(ray.origin, CapsuleCastRadius, ray.direction, out tempHit, CapsuleCastMaxDistance, discludePlayer))
         {
             groundConfirm(tempHit);
             gHit = tempHit;
@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour {
     void groundConfirm(RaycastHit tempHit)
     {
         Collider[] col = new Collider[3];
-        int num = Physics.OverlapSphereNonAlloc(transform.TransformPoint(groundCheckPoint), groundConfirmRadius, col, discludePlayer);
+        int num = Physics.OverlapCapsuleNonAlloc(transform.TransformPoint(groundCheckPoint), groundConfirmRadius, col, discludePlayer);
 
         isGrounded = false;
 
@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour {
     void collisionCheck()
     { 
         Collider[] overlaps = new Collider[4];
-        int num = Physics.OverlapSphereNonAlloc(transform.TransformPoint(scol.center), scol.radius, overlaps, discludePlayer, QueryTriggerInteraction.UseGlobal);
+        int num = Physics.OverlapCapsuleNonAlloc(transform.TransformPoint(scol.center), scol.radius, overlaps, discludePlayer, QueryTriggerInteraction.UseGlobal);
 
         for (int i = 0; i < num; i++)
         {
@@ -179,6 +179,6 @@ public class PlayerController : MonoBehaviour {
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(debugRay1.origin + debugRay1.direction * gHit.distance, sphereCastRadius);
+        Gizmos.DrawWireSphere(debugRay1.origin + debugRay1.direction * gHit.distance, CapsuleCastRadius);
     }
 }
